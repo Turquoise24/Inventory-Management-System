@@ -12,8 +12,6 @@ import {
   setLoading,
 } from "@/store/slices/notificationSlice";
 import { notificationService } from "@/services/notificationService";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { toast } from "react-toastify";
@@ -23,7 +21,7 @@ const NotificationsPage: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { notifications, unreadCount, loading } = useAppSelector(
-    (state) => state.notification
+    (state) => state.notification,
   );
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 

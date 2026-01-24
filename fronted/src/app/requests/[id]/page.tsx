@@ -53,7 +53,7 @@ export default function RequestDetailPage({
           setError("This request was not found. It may have been deleted.");
         } else {
           setError(
-            err.response?.data?.message || "Failed to load request details"
+            err.response?.data?.message || "Failed to load request details",
           );
         }
 
@@ -87,7 +87,7 @@ export default function RequestDetailPage({
   };
 
   const getUserName = (
-    userField: string | { name: string } | undefined
+    userField: string | { name: string } | undefined,
   ): string => {
     if (!userField) return "Unknown";
     return typeof userField === "string" ? userField : userField.name;

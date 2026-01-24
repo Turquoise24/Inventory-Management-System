@@ -10,11 +10,8 @@ import {
   setError,
 } from "@/store/slices/productSlice";
 import { productService } from "@/services/productService";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import { Product } from "@/types";
 
 const ProductsPage: React.FC = () => {
   const router = useRouter();
@@ -57,7 +54,7 @@ const ProductsPage: React.FC = () => {
     (product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchTerm.toLowerCase())
+      product.sku.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const isAdmin = user?.role === "admin";

@@ -10,10 +10,6 @@ import {
   setLoading,
 } from "@/store/slices/authSlice";
 import { authService } from "@/services/authService";
-import Input from "@/components/ui/Input";
-import Select from "@/components/ui/Select";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import { toast } from "react-toastify";
 
 const RegisterPage: React.FC = () => {
@@ -30,7 +26,7 @@ const RegisterPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setFormData({
       ...formData,
@@ -74,7 +70,7 @@ const RegisterPage: React.FC = () => {
           registerSuccess({
             user: response.data,
             token: response.token,
-          })
+          }),
         );
         toast.success("Account created successfully!");
         router.push("/products");

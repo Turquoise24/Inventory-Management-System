@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import { healthService } from "@/services/healthService";
 import { toast } from "react-toastify";
 
@@ -25,13 +22,13 @@ export default function HomePage() {
 
       if (!isHealthy) {
         toast.error(
-          "⚠️ Backend server is offline. Please start the backend to use the application."
+          "⚠️ Backend server is offline. Please start the backend to use the application.",
         );
 
         // If user is authenticated but backend is down, logout to prevent confusion
         if (isAuthenticated) {
           toast.warning(
-            "You have been logged out because the backend is unavailable."
+            "You have been logged out because the backend is unavailable.",
           );
           dispatch(logout());
         }

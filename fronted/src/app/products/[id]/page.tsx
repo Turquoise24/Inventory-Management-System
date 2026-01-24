@@ -7,7 +7,6 @@ import { productService } from "@/services/productService";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { toast } from "react-toastify";
 import { Product } from "@/types";
 

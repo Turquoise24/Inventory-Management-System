@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
@@ -11,8 +11,6 @@ import {
 import { setProducts } from "@/store/slices/productSlice";
 import { requestService } from "@/services/requestService";
 import { productService } from "@/services/productService";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { toast } from "react-toastify";
@@ -157,7 +155,7 @@ const RequestsPage: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {format(
                         new Date(request.transactionDate),
-                        "MMM dd, yyyy"
+                        "MMM dd, yyyy",
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
