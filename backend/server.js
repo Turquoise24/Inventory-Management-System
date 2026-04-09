@@ -55,24 +55,41 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 
 // CORS configuration
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+  process.env.FRONTEND_URL,
+];
+
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3001",
-    process.env.FRONTEND_URL,
-    /https:\/\/.*\.vercel\.app$/, // Allow all Vercel deployments
-  ].filter(Boolean),
+  origin: function (origin, callback) {
+    const isAllowed =
+      !origin || // Allow no origin (mobile apps, curl)
+      allowedOrigins.includes(origin) ||
+      /https:\/\/.*\.vercel\.app$/.test(origin); // Allow ALL Vercel deployments
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`⚠️  CORS blocked: ${origin} not in allowed list`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-  credentials: true, // Required if you are using cookies or sessions
+  credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
-  maxAge: 86400, // 24 hours for production
+  maxAge: 86400,
 };
 
-console.log("CORS configured for origins:", corsOptions.origin);
+console.log("✓ CORS configured - Allowed origins:", allowedOrigins);
+console.log("✓ CORS also allows: *.vercel.app domains");
 
 app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options("*", cors(corsOptions));
 
 // API routes
 app.use("/api/v1/products", products);
