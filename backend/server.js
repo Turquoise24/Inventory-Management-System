@@ -73,7 +73,7 @@ const corsOptions = {
     const isAllowed =
       !origin || // Allow no origin (mobile apps, curl)
       allowedOrigins.includes(origin) ||
-      (origin && /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(origin)); // Allow ALL Vercel deployments
+      (origin && /vercel\.app$/.test(origin)); // Allow ALL Vercel deployments
 
     if (isAllowed) {
       callback(null, true);
@@ -92,8 +92,10 @@ console.log("✓ CORS configured - Allowed origins:", allowedOrigins);
 console.log("✓ CORS also allows: *.vercel.app domains");
 
 // Handle preflight requests BEFORE routes
-app.options("*", cors(corsOptions));
-app.use(cors(corsOptions));
+// Temporarily allow all origins for quick verification in preview environments.
+// WARNING: revert this change after testing — this is permissive.
+app.options("*", cors({ origin: true, credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 
 // Fallback CORS headers: ensure responses (including errors) include CORS
 app.use((req, res, next) => {
