@@ -68,10 +68,12 @@ export default function HomePage() {
             <div>
               <p className="font-bold">Backend Server Offline</p>
               <p className="text-sm">
-                Please start the backend server at{" "}
+                The backend API is unreachable. Please check that the backend is
+                deployed and that{" "}
                 <code className="bg-red-200 px-1 rounded">
-                  http://localhost:5000
-                </code>
+                  NEXT_PUBLIC_API_URL
+                </code>{" "}
+                is set correctly.
               </p>
             </div>
           </div>

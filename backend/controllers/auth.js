@@ -66,7 +66,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true,
   };
   if (process.env.NODE_ENV === "production") {
-    options.secure = true;
+    options.secure = true; // required: sameSite 'none' only works over HTTPS
+    options.sameSite = "none"; // required for cross-origin (cross-site) cookie delivery
   }
   res.status(statusCode).cookie("token", token, options).json({
     success: true,

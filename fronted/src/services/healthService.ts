@@ -13,7 +13,7 @@ export const healthService = {
       const base = getApiBase();
       const url = `${base}/health`;
       const response = await axios.get(url, {
-        timeout: 5000,
+        timeout: 15000,
         headers: { "Content-Type": "application/json" },
       });
       return response.status === 200;

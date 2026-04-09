@@ -95,22 +95,6 @@ console.log("✓ CORS also allows: *.vercel.app domains");
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
-// Fallback CORS headers: ensure responses (including errors) include CORS
-app.use((req, res, next) => {
-  const origin = req.headers.origin || process.env.FRONTEND_URL || "*";
-  res.setHeader("Access-Control-Allow-Origin", origin);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Requested-With",
-  );
-  next();
-});
-
 // API routes
 app.use("/api/v1/products", products);
 app.use("/api/v1/auth", auth);
