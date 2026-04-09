@@ -65,10 +65,15 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
+    // Log origin for debugging
+    if (origin) {
+      console.log(`CORS request from origin: ${origin}`);
+    }
+
     const isAllowed =
       !origin || // Allow no origin (mobile apps, curl)
       allowedOrigins.includes(origin) ||
-      /https:\/\/.*\.vercel\.app$/.test(origin); // Allow ALL Vercel deployments
+      (origin && /https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(origin)); // Allow ALL Vercel deployments
 
     if (isAllowed) {
       callback(null, true);
@@ -86,10 +91,9 @@ const corsOptions = {
 console.log("✓ CORS configured - Allowed origins:", allowedOrigins);
 console.log("✓ CORS also allows: *.vercel.app domains");
 
-app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly
+// Handle preflight requests BEFORE routes
 app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 // API routes
 app.use("/api/v1/products", products);
