@@ -92,10 +92,8 @@ console.log("✓ CORS configured - Allowed origins:", allowedOrigins);
 console.log("✓ CORS also allows: *.vercel.app domains");
 
 // Handle preflight requests BEFORE routes
-// Temporarily allow all origins for quick verification in preview environments.
-// WARNING: revert this change after testing — this is permissive.
-app.options("*", cors({ origin: true, credentials: true }));
-app.use(cors({ origin: true, credentials: true }));
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Fallback CORS headers: ensure responses (including errors) include CORS
 app.use((req, res, next) => {
