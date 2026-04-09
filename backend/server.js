@@ -58,9 +58,13 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
   process.env.FRONTEND_URL,
   /https:\/\/.*\.vercel\.app$/, // Allow all Vercel preview deployments
 ].filter(Boolean);
+
+console.log("Allowed CORS Origins:", allowedOrigins);
 
 app.use(
   cors({
@@ -79,11 +83,15 @@ app.use(
       if (isAllowed) {
         callback(null, true);
       } else {
+        console.warn(`CORS blocked request from origin: ${origin}`);
         callback(null, false);
       }
     },
     credentials: true,
-  })
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    maxAge: 3600,
+  }),
 );
 
 // API routes
@@ -141,7 +149,7 @@ app.use(
   swaggerUI.setup(swaggerDocs, {
     customCss: ".swagger-ui .topbar { display: none }",
     customSiteTitle: "StockMe API Documentation",
-  })
+  }),
 );
 
 // Health check endpoint
@@ -191,8 +199,8 @@ const server = app.listen(
   console.log(
     `StockMe API Server running in ${
       process.env.NODE_ENV || "development"
-    } mode on http://localhost:${PORT}`
-  )
+    } mode on http://localhost:${PORT}`,
+  ),
 );
 
 // Handle unhandled promise rejections
