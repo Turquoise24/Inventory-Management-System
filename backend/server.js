@@ -61,7 +61,7 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
   process.env.FRONTEND_URL,
-  /https:\/\/.*\.vercel\.app$/, // Allow all Vercel preview deployments
+  /https:\/\/.*\.vercel\.app$/, // Allow all Vercel deployments
 ].filter(Boolean);
 
 console.log("Allowed CORS Origins:", allowedOrigins);
@@ -70,7 +70,10 @@ app.use(
   cors({
     origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
+      if (!origin) {
+        console.log("✓ CORS: No origin detected (mobile app or curl)");
+        return callback(null, true);
+      }
 
       // Check if origin matches any allowed origin (string or regex)
       const isAllowed = allowedOrigins.some((allowedOrigin) => {
@@ -81,16 +84,18 @@ app.use(
       });
 
       if (isAllowed) {
+        console.log(`✓ CORS: Origin allowed: ${origin}`);
         callback(null, true);
       } else {
-        console.warn(`CORS blocked request from origin: ${origin}`);
+        console.warn(`✗ CORS blocked request from origin: ${origin}`);
         callback(null, false);
       }
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    maxAge: 3600,
+    maxAge: 86400, // 24 hours for production
+    exposedHeaders: ["x-total-count"],
   }),
 );
 
