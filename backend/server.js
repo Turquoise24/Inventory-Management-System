@@ -55,49 +55,24 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 
 // CORS configuration
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://127.0.0.1:3000",
-  "http://127.0.0.1:3001",
-  process.env.FRONTEND_URL,
-  /https:\/\/.*\.vercel\.app$/, // Allow all Vercel deployments
-].filter(Boolean);
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    process.env.FRONTEND_URL,
+    /https:\/\/.*\.vercel\.app$/, // Allow all Vercel deployments
+  ].filter(Boolean),
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  credentials: true, // Required if you are using cookies or sessions
+  allowedHeaders: ["Content-Type", "Authorization"],
+  maxAge: 86400, // 24 hours for production
+};
 
-console.log("Allowed CORS Origins:", allowedOrigins);
+console.log("CORS configured for origins:", corsOptions.origin);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) {
-        console.log("✓ CORS: No origin detected (mobile app or curl)");
-        return callback(null, true);
-      }
-
-      // Check if origin matches any allowed origin (string or regex)
-      const isAllowed = allowedOrigins.some((allowedOrigin) => {
-        if (allowedOrigin instanceof RegExp) {
-          return allowedOrigin.test(origin);
-        }
-        return allowedOrigin === origin;
-      });
-
-      if (isAllowed) {
-        console.log(`✓ CORS: Origin allowed: ${origin}`);
-        callback(null, true);
-      } else {
-        console.warn(`✗ CORS blocked request from origin: ${origin}`);
-        callback(null, false);
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    maxAge: 86400, // 24 hours for production
-    exposedHeaders: ["x-total-count"],
-  }),
-);
+app.use(cors(corsOptions));
 
 // API routes
 app.use("/api/v1/products", products);
