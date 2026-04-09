@@ -64,10 +64,9 @@ const sendTokenResponse = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
-  if (process.env.NODE_ENV === "production") {
-    options.secure = true;
-  }
   res.status(statusCode).cookie("token", token, options).json({
     success: true,
     _id: user._id,
@@ -95,6 +94,8 @@ exports.logout = async (req, res, next) => {
   res.cookie("token", "none", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
   res.status(200).json({
     success: true,
